@@ -1,7 +1,8 @@
-<img src="logo.png"
+<p align="center">
+  <img src="logo.png"
   width=100
-  alt="App Bridge logo"
-  style="margin: 0 auto; display: block; margin-top: 20px;" />
+  alt="App Bridge logo" />
+</p>
 
 # App Bridge
 
