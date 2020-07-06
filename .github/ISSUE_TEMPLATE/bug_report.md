@@ -4,35 +4,40 @@ about: Create a report to help us improve
 labels: bug
 ---
 
-**Describe the bug**
+## Describe the bug
+
 A clear and concise description of what the bug is.
 
-**To Reproduce**
-Steps to reproduce the behavior:
+### To Reproduce
 
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Steps to reproduce the behaviour:
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+1. Launch the app from '...'
+2. Click on '...'
+3. See error
 
-**Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**Desktop (please complete the following information):**
+### Expected behaviour
 
-- OS: [e.g. MacOS]
-- Browser [e.g. chrome, safari]
-- Version [e.g. 22]
+A clear and concise description of what you expected to happen.
 
-**Smartphone (please complete the following information):**
+## Contextual information
 
-- Device: [e.g. iPhone6]
-- OS: [e.g. iOS8.1]
-- Browser [e.g. stock browser, safari]
-- Version [e.g. 22]
+### Packages and versions
 
-**Additional context**
-Add any other context about the problem here.
+ie:
+
+- `@shopify/app-bridge` @ `1.23.0`
+- `@shopify/app-bridge-react` @ `1.23.0`
+- `@shopify/polaris` @ `4.26.0`
+
+## Platform
+
+- OS: [e.g. MacOS, Windows, iOS, Android]
+- OS Version [e.g. 22]
+- App [e.g. Shopify Mobile, Shopify POS, Chrome, Safari, Firefox]
+
+### Additional context
+
+Add any other context about the problem here, ie your app’s configuration (Node, Next.js, Rails).
