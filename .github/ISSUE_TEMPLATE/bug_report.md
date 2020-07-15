@@ -26,7 +26,7 @@ A clear and concise description of what you expected to happen.
 
 ### Packages and versions
 
-ie:
+List the relevant packages you’re using, and their versions. For example:
 
 - `@shopify/app-bridge` @ `1.23.0`
 - `@shopify/app-bridge-react` @ `1.23.0`
@@ -34,10 +34,10 @@ ie:
 
 ## Platform
 
-- OS: [e.g. MacOS, Windows, iOS, Android]
-- OS Version [e.g. 22]
-- App [e.g. Shopify Mobile, Shopify POS, Chrome, Safari, Firefox]
+- OS: [for example MacOS, Windows, iOS, Android]
+- OS Version: [for example 10.15.5]
+- App: [for example Shopify Mobile, Shopify POS, Chrome, Safari, Firefox]
 
 ### Additional context
 
-Add any other context about the problem here, ie your app’s configuration (Node, Next.js, Rails).
+Add any other context about the problem here, such as your app’s configuration (Node, Next.js, Rails).
