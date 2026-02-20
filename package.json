@@ -1,0 +1,33 @@
+{
+  "name": "shopify-app-bridge",
+  "type": "module",
+  "private": true,
+  "description": "Monorepo for Shopify App Bridge packages",
+  "homepage": "https://github.com/Shopify/shopify-app-bridge#readme",
+  "bugs": {
+    "url": "https://github.com/Shopify/shopify-app-bridge/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Shopify/shopify-app-bridge.git"
+  },
+  "author": "Shopify Inc.",
+  "engines": {
+    "pnpm": ">=10.0.0"
+  },
+  "packageManager": "pnpm@10.0.0",
+  "scripts": {
+    "build": "pnpm -r run build",
+    "changeset:publish": "pnpm run build && changeset publish",
+    "changeset:version": "changeset version",
+    "lint": "pnpm -r run lint",
+    "test": "pnpm -r run test",
+    "type-check": "pnpm -r run type-check",
+    "format": "prettier --write .",
+    "format:check": "prettier --check ."
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.29.8",
+    "prettier": "^3.8.1"
+  }
+}
