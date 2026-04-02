@@ -30,6 +30,14 @@ jobs:
         id: check
         run: node packages/app-bridge-types/scripts/check-cdn-updates.mjs
 
+      - name: Upload diff artifact
+        if: steps.check.outputs.has_changes == 'true'
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        with:
+          name: cdn-types-diff
+          path: ${{ steps.check.outputs.diff_file }}
+          retention-days: 30
+
       - name: Create PR
         if: steps.check.outputs.has_changes == 'true'
         env:

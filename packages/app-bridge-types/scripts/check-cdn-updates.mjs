@@ -179,8 +179,14 @@ Merging this PR will trigger a patch release of \`@shopify/app-bridge-types\`.
 const prBodyFile = join(tempDir, 'pr-body.md');
 writeFileSync(prBodyFile, prBody);
 
+// Write diff to a file for artifact upload
+const diffFile = join(tempDir, 'cdn-types.diff');
+writeFileSync(diffFile, diff);
+
 setOutput('has_changes', 'true');
 setOutput('pr_body_file', prBodyFile);
+setOutput('diff_file', diffFile);
 
+console.log(`Diff written to ${diffFile}`);
 console.log(`PR body written to ${prBodyFile}`);
 console.log('Done.');
