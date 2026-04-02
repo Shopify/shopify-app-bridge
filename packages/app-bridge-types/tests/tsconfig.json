@@ -1,0 +1,10 @@
+{
+  "extends": "@shopify/typescript-configs/library.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "declaration": true,
+    "types": ["node", "../"],
+    "skipLibCheck": false
+  },
+  "include": ["."]
+}
