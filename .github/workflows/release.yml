@@ -1,3 +1,5 @@
+# Creates "Version Packages" PRs from pending changesets and publishes to npm
+# when those PRs are merged.
 name: Release
 
 on:

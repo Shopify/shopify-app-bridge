@@ -1,3 +1,4 @@
+# Ensures a changeset is present on PRs. Skip with the "🤖Skip Changelog" label.
 name: Changelog
 
 on:
