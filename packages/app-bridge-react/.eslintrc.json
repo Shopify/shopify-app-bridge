@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "plugin:@shopify/typescript",
+    "plugin:@shopify/jest",
+    "plugin:@shopify/node",
+    "plugin:@shopify/prettier"
+  ],
+  "plugins": ["react-hooks"],
+  "rules": {
+    "@typescript-eslint/consistent-indexed-object-style": "off",
+    "@typescript-eslint/naming-convention": "off",
+    "@typescript-eslint/no-namespace": "off",
+    "consistent-return": "off",
+    "func-name-matching": "off",
+    "no-console": "off",
+    "no-catch-shadow": "off",
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error"
+  }
+}

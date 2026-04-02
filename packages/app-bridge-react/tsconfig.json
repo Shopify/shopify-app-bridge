@@ -1,0 +1,10 @@
+{
+  "extends": "@shopify/typescript-configs/library.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "types": ["react", "react-dom"]
+  },
+  "include": ["src"]
+}
