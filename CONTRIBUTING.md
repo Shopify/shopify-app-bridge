@@ -2,11 +2,17 @@
 
 ## Table of Contents
 
-- [Getting Started](#getting-started)
-- [Development Workflow](#development-workflow)
-- [Changesets and Versioning](#changesets-and-versioning)
-- [Releasing](#releasing)
-- [Package-Specific Guides](#package-specific-guides)
+- [Contributing to Shopify App Bridge](#contributing-to-shopify-app-bridge)
+  - [Table of Contents](#table-of-contents)
+  - [Getting Started](#getting-started)
+  - [Development Workflow](#development-workflow)
+  - [Changesets and Versioning](#changesets-and-versioning)
+    - [Adding a changeset](#adding-a-changeset)
+    - [Skipping the changelog check](#skipping-the-changelog-check)
+  - [Releasing](#releasing)
+    - [How it works](#how-it-works)
+    - [Summary](#summary)
+  - [Package-Specific Guides](#package-specific-guides)
 
 ## Getting Started
 
@@ -76,18 +82,14 @@ Releases are fully automated via the [Release workflow](.github/workflows/releas
 
 ### Summary
 
-```
-Feature PR (with changeset) ──merge──▶ main
-                                         │
-                              Release workflow runs
-                                         │
-                              "Version Packages" PR opened
-                                         │
-                                   ──merge──▶ main
-                                                │
-                                     Release workflow runs
-                                                │
-                                        Published to npm 🚀
+```mermaid
+flowchart TD
+    A["Feature PR<br>(with changeset)"] -->|merge| B[main]
+    B --> C[Release workflow runs]
+    C --> D["'Version Packages' PR opened"]
+    D -->|merge| E[main]
+    E --> F[Release workflow runs]
+    F --> G["Published to npm 🚀"]
 ```
 
 > **Important:** Do _not_ manually bump versions or edit changelogs. Let Changesets handle it.
