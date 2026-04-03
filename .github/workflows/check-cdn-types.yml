@@ -1,3 +1,5 @@
+# Detects changes between the CDN-hosted App Bridge types and the published
+# @shopify/app-bridge-types npm package, and opens a PR when they differ.
 name: Check CDN Types
 
 on:

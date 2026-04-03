@@ -1,3 +1,4 @@
+# Runs formatting, build, lint, type-check, and tests.
 name: CI
 
 on:
