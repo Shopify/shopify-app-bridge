@@ -25,6 +25,7 @@
   "devDependencies": {
     "@shopify/typescript-configs": "catalog:",
     "@types/node": "catalog:",
+    "@types/react": "catalog:",
     "cjyes": "^0.3.1",
     "typescript": "catalog:"
   },
