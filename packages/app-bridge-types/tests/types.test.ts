@@ -1,4 +1,5 @@
 import {describe, it} from 'node:test';
+import type {ButtonHTMLAttributes} from 'react';
 
 import {Collection, Product, ProductVariant} from '..';
 
@@ -15,5 +16,18 @@ describe('App Bridge types', () => {
 
     const variants = await shopify.resourcePicker({type: 'variant'});
     expect<ProductVariant>(variants![0]).toPass();
+  });
+
+  it('allows UI libraries to narrow their own button props', () => {
+    interface LibraryButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+      variant?: 'ghost' | 'link';
+      tone?: 'neutral';
+    }
+
+    expect<LibraryButtonProps>({
+      type: 'button',
+      variant: 'ghost',
+      tone: 'neutral',
+    }).toPass();
   });
 });
