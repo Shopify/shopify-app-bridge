@@ -10,6 +10,7 @@
   },
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "@shopify:registry": "https://registry.npmjs.org"
   },
   "license": "ISC",
