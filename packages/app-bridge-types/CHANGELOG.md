@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.7.1
+
+### Patch Changes
+
+- e088d1c: Automated update of CDN types (+1662 -62 lines)
+
+  See the [App Bridge changelog](https://shopify.dev/changelog?filter=api&api_type=app-bridge) for details.
+
 ## 0.7.0
 
 ### Minor Changes

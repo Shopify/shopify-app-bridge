@@ -1,6 +1,6 @@
 {
   "name": "@shopify/app-bridge-types",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "description": "Companion types library for the Shopify App Bridge script",
   "private": false,
   "publishConfig": {

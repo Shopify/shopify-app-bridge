@@ -1,6 +1,6 @@
 {
   "name": "@shopify/app-bridge-react",
-  "version": "4.2.10",
+  "version": "4.2.11",
   "description": "React wrappers for the Shopify App Bridge library",
   "license": "MIT",
   "author": "Shopify Inc.",
