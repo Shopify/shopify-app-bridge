@@ -6,7 +6,8 @@
   "author": "Shopify Inc.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Shopify/shopify-app-bridge.git"
+    "url": "git+https://github.com/Shopify/shopify-app-bridge.git",
+    "directory": "packages/app-bridge-react"
   },
   "bugs": {
     "url": "https://github.com/Shopify/shopify-app-bridge/issues"
@@ -15,6 +16,7 @@
   "private": false,
   "publishConfig": {
     "access": "public",
+    "provenance": true,
     "@shopify:registry": "https://registry.npmjs.org"
   },
   "sideEffects": false,
