@@ -29,6 +29,11 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'pnpm'
+          # Writes registry=https://registry.npmjs.org/ to ~/.npmrc so that
+          # `changeset publish` (npm publish) targets the public registry and,
+          # combined with the id-token permission below, authenticates via npm
+          # OIDC Trusted Publishing — no static NPM_TOKEN secret required.
+          registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
         run: pnpm install
@@ -43,3 +48,8 @@ jobs:
           title: 'Version Packages'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Emit npm provenance attestations (requires the id-token permission).
+          NPM_CONFIG_PROVENANCE: true
+          # Empty token forces npm to authenticate via OIDC Trusted Publishing
+          # rather than expecting a static auth token in ~/.npmrc.
+          NPM_TOKEN: ''
