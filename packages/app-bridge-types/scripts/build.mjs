@@ -14,7 +14,29 @@ if (!response.ok) {
   );
 }
 
-const types = await response.text();
+const types = relaxGlobalMenuItemProperties(await response.text());
 await writeFile(outFile, types);
 
 console.log(`Downloaded types to ${outFile}`);
+
+function relaxGlobalMenuItemProperties(types) {
+  const exactMenuItemTypes = `interface MenuItemProperties {
+\tvariant?: "primary" | "breadcrumb" | null | undefined;
+\ttone?: "critical" | "default";
+\tdisabled?: boolean;
+\tloading?: boolean | string;
+}`;
+
+  const relaxedMenuItemTypes = `interface MenuItemProperties {
+\tvariant?: "primary" | "breadcrumb" | (string & {}) | null | undefined;
+\ttone?: "critical" | "default" | (string & {});
+\tdisabled?: boolean;
+\tloading?: boolean | string;
+}`;
+
+  if (!types.includes(exactMenuItemTypes)) {
+    throw new Error('Unable to find MenuItemProperties in downloaded types');
+  }
+
+  return types.replace(exactMenuItemTypes, relaxedMenuItemTypes);
+}

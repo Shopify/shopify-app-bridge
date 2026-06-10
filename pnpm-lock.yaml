@@ -127,6 +127,9 @@ importers:
       '@types/node':
         specifier: 'catalog:'
         version: 24.10.13
+      '@types/react':
+        specifier: 'catalog:'
+        version: 18.3.28
       cjyes:
         specifier: ^0.3.1
         version: 0.3.1
