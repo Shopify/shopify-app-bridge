@@ -5,8 +5,12 @@ import {
   useState,
   forwardRef,
   type ForwardedRef,
+  useLayoutEffect,
 } from 'react';
 import type {UISaveBarAttributes} from '@shopify/app-bridge-types';
+
+const useIsomorphicLayoutEffect =
+  typeof window === 'undefined' ? useEffect : useLayoutEffect;
 
 declare global {
   namespace JSX {
@@ -73,7 +77,7 @@ export const SaveBar = forwardRef(function InternalSaveBar(
     };
   }, [saveBar, onHide]);
 
-  useEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!saveBar) return;
     return () => {
       saveBar.hide();
