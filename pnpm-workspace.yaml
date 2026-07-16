@@ -14,7 +14,7 @@ catalog:
   'react-dom': ^18.2.0
   'typescript': ^5.9.3
   'vite': ^6.4.2
-  'vitest': ^4.0.0
+  'vitest': ^4.1.0
   'vite-plugin-babel': ^1.3.0
   'vite-plugin-dts': ^4.5.3
   'vite-tsconfig-paths': ^5.1.4
