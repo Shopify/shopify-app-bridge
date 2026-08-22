@@ -5,6 +5,7 @@ import {
   useState,
   forwardRef,
   type ForwardedRef,
+  useCallback,
 } from 'react';
 import type {UISaveBarAttributes} from '@shopify/app-bridge-types';
 
@@ -48,6 +49,20 @@ export const SaveBar = forwardRef(function InternalSaveBar(
 ) {
   const [saveBar, setSaveBar] = useState<UISaveBarElement | null>();
 
+  const refCallback = useCallback(
+    (saveBar: UISaveBarElement | null) => {
+      setSaveBar(saveBar);
+      if (forwardedRef) {
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(saveBar);
+        } else {
+          forwardedRef.current = saveBar;
+        }
+      }
+    },
+    [forwardedRef],
+  );
+
   useEffect(() => {
     if (!saveBar) return;
     if (open) {
@@ -81,19 +96,7 @@ export const SaveBar = forwardRef(function InternalSaveBar(
   }, [saveBar]);
 
   return (
-    <ui-save-bar
-      {...rest}
-      ref={(saveBar) => {
-        setSaveBar(saveBar);
-        if (forwardedRef) {
-          if (typeof forwardedRef === 'function') {
-            forwardedRef(saveBar);
-          } else {
-            forwardedRef.current = saveBar;
-          }
-        }
-      }}
-    >
+    <ui-save-bar {...rest} ref={refCallback}>
       {children}
     </ui-save-bar>
   );
