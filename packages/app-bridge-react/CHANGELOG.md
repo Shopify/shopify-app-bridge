@@ -1,5 +1,13 @@
 # Changelog
 
+## 4.2.13
+
+### Patch Changes
+
+- f7c3569: Stabilize SaveBar and Modal ref callbacks so React 18 does not detach/attach (and setState) on every render.
+
+  Fixes #565
+
 ## 4.2.12
 
 ### Patch Changes
