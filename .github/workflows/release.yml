@@ -1,5 +1,7 @@
 # Creates "Version Packages" PRs from pending changesets and publishes to npm
-# when those PRs are merged.
+# when those PRs are merged. Versioning, building, publishing, and GitHub release
+# creation use separate jobs so no job can both execute package builds and hold
+# repository-write plus npm OIDC permissions.
 name: Release
 
 on:
@@ -9,17 +11,88 @@ on:
 
 concurrency: ${{ github.workflow }}-${{ github.ref }}
 
+# Each job declares only the permissions it needs.
+permissions: {}
+
 jobs:
-  release:
-    name: Release
-    runs-on: ubuntu-latest
+  select_mode:
+    name: Select release mode
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
     permissions:
-      contents: write # Required for Changesets to push branches
-      id-token: write # Required for OIDC authentication
-      pull-requests: write # Required for Changesets to create PRs
+      contents: read
+    outputs:
+      mode: ${{ steps.changesets.outputs.mode }}
+      publish_plan_artifact_id: ${{ steps.changesets.outputs['publish-plan-artifact-id'] }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Select release mode
+        id: changesets
+        uses: changesets/action/select-mode@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
+
+  version:
+    name: Create or update version PR
+    if: needs.select_mode.outputs.mode == 'version'
+    needs: select_mode
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: .nvmrc
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Create release pull request
+        uses: changesets/action/version@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
+        with:
+          script: pnpm changeset:version
+          commit-message: 'chore: version packages'
+          pr-title: 'Version Packages'
+
+  build:
+    name: Build and pack release artifacts
+    if: needs.select_mode.outputs.mode == 'publish'
+    needs: select_mode
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      pack_dir_artifact_id: ${{ steps.pack.outputs['pack-dir-artifact-id'] }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
 
       - name: Install pnpm
         uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
@@ -29,22 +102,80 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: 'pnpm'
-          # Writes registry=https://registry.npmjs.org/ to ~/.npmrc so that
-          # `changeset publish` (npm publish) targets the public registry and,
-          # combined with the id-token permission below, authenticates via npm
-          # OIDC Trusted Publishing — no static NPM_TOKEN secret required.
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Pack publishable packages
+        id: pack
+        uses: changesets/action/pack@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
+        with:
+          publish-plan-artifact-id: ${{ needs.select_mode.outputs.publish_plan_artifact_id }}
+
+  publish:
+    name: Publish verified artifacts to npm
+    if: needs.select_mode.outputs.mode == 'publish'
+    needs: [select_mode, build]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      contents: read
+      id-token: write
+    outputs:
+      published: ${{ steps.publish.outputs.published }}
+      published_packages: ${{ steps.publish.outputs['published-packages'] }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
 
-      - name: Install dependencies
-        run: pnpm install
+      # The publish action needs the Changesets CLI, but dependency lifecycle
+      # scripts must not execute in this OIDC-enabled job.
+      - name: Install locked publishing tools
+        run: pnpm install --frozen-lockfile --ignore-scripts
 
-      - name: Create release Pull Request or Publish to NPM
-        id: changesets
-        uses: changesets/action@6a0a831ff30acef54f2c6aa1cbbc1096b066edaf # v1.7.0
+      - name: Publish packed artifacts
+        id: publish
+        uses: changesets/action/publish@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
-          version: pnpm changeset:version
-          publish: pnpm changeset:publish
-          commit: 'chore: version packages'
-          title: 'Version Packages'
+          pack-dir-artifact-id: ${{ needs.build.outputs.pack_dir_artifact_id }}
+          create-github-releases: false
+          push-git-tags: false
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          # Publishing must not execute package lifecycle scripts in the
+          # OIDC-enabled job; the package was already built and packed.
+          NPM_CONFIG_IGNORE_SCRIPTS: 'true'
+
+  github_releases:
+    name: Create GitHub releases
+    if: needs.publish.outputs.published == 'true'
+    needs: publish
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Create tags and releases
+        run: node .github/scripts/create-github-releases.mjs
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PUBLISHED_PACKAGES: ${{ needs.publish.outputs.published_packages }}
