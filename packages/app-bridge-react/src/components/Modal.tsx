@@ -6,6 +6,7 @@ import {
   forwardRef,
   type ForwardedRef,
   Children,
+  useCallback,
 } from 'react';
 import ReactDOM from 'react-dom';
 import type {UIModalAttributes} from '@shopify/app-bridge-types';
@@ -50,6 +51,20 @@ export const Modal = forwardRef(function InternalModal(
   forwardedRef: ForwardedRef<UIModalElement>,
 ) {
   const [modal, setModal] = useState<UIModalElement | null>();
+
+  const refCallback = useCallback(
+    (modal: UIModalElement | null) => {
+      setModal(modal);
+      if (forwardedRef) {
+        if (typeof forwardedRef === 'function') {
+          forwardedRef(modal);
+        } else {
+          forwardedRef.current = modal;
+        }
+      }
+    },
+    [forwardedRef],
+  );
 
   const {titleBar, saveBar, modalContent} = Children.toArray(children).reduce(
     (acc, node) => {
@@ -111,19 +126,7 @@ export const Modal = forwardRef(function InternalModal(
   }, [modal]);
 
   return (
-    <ui-modal
-      {...rest}
-      ref={(modal) => {
-        setModal(modal);
-        if (forwardedRef) {
-          if (typeof forwardedRef === 'function') {
-            forwardedRef(modal);
-          } else {
-            forwardedRef.current = modal;
-          }
-        }
-      }}
-    >
+    <ui-modal {...rest} ref={refCallback}>
       {titleBar}
       {saveBar}
       <div>{contentPortal}</div>
