@@ -1,11 +1,11 @@
-import type {LegacyRef, ReactNode} from 'react';
+import type {ReactNode} from 'react';
 import type {UINavMenuAttributes} from '@shopify/app-bridge-types';
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'ui-nav-menu': UINavMenuAttributes & {
-        ref?: LegacyRef<UINavMenuElement | null>;
+        ref?: import('react').LegacyRef<UINavMenuElement | null>;
       };
     }
   }

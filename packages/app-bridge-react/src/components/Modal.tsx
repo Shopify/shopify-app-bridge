@@ -1,7 +1,6 @@
 import {
   type ReactNode,
   useEffect,
-  type LegacyRef,
   useState,
   forwardRef,
   type ForwardedRef,
@@ -11,11 +10,11 @@ import {
 import ReactDOM from 'react-dom';
 import type {UIModalAttributes} from '@shopify/app-bridge-types';
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'ui-modal': UIModalAttributes & {
-        ref?: LegacyRef<UIModalElement | null>;
+        ref?: import('react').LegacyRef<UIModalElement | null>;
       };
     }
   }
