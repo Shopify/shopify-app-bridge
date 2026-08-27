@@ -1,7 +1,6 @@
 # Creates "Version Packages" PRs from pending changesets and publishes to npm
-# when those PRs are merged. Versioning, building, publishing, and GitHub release
-# creation use separate jobs so no job can both execute package builds and hold
-# repository-write plus npm OIDC permissions.
+# when those PRs are merged. Versioning and building use separate jobs so
+# package build code never runs with repository-write or npm OIDC permissions.
 name: Release
 
 on:
@@ -123,8 +122,8 @@ jobs:
     timeout-minutes: 10
     permissions:
       actions: read
-      contents: read
-      id-token: write
+      contents: write # Required to push tags and create GitHub releases
+      id-token: write # Required for npm trusted publishing
     outputs:
       published: ${{ steps.publish.outputs.published }}
       published_packages: ${{ steps.publish.outputs['published-packages'] }}
@@ -153,29 +152,7 @@ jobs:
         uses: changesets/action/publish@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
         with:
           pack-dir-artifact-id: ${{ needs.build.outputs.pack_dir_artifact_id }}
-          create-github-releases: false
-          push-git-tags: false
         env:
           # Publishing must not execute package lifecycle scripts in the
           # OIDC-enabled job; the package was already built and packed.
           NPM_CONFIG_IGNORE_SCRIPTS: 'true'
-
-  github_releases:
-    name: Create GitHub releases
-    if: needs.publish.outputs.published == 'true'
-    needs: publish
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    permissions:
-      contents: write
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-        with:
-          persist-credentials: false
-
-      - name: Create tags and releases
-        run: node .github/scripts/create-github-releases.mjs
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          PUBLISHED_PACKAGES: ${{ needs.publish.outputs.published_packages }}
