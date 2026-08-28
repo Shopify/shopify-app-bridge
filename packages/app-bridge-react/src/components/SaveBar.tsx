@@ -1,7 +1,6 @@
 import {
   type ReactNode,
   useEffect,
-  type LegacyRef,
   useState,
   forwardRef,
   type ForwardedRef,
@@ -9,11 +8,11 @@ import {
 } from 'react';
 import type {UISaveBarAttributes} from '@shopify/app-bridge-types';
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'ui-save-bar': UISaveBarAttributes & {
-        ref?: LegacyRef<UISaveBarElement | null>;
+        ref?: import('react').LegacyRef<UISaveBarElement | null>;
       };
     }
   }

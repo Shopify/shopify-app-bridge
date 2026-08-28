@@ -1,11 +1,11 @@
-import type {LegacyRef, ReactNode} from 'react';
+import type {ReactNode} from 'react';
 import type {UITitleBarAttributes} from '@shopify/app-bridge-types';
 
-declare global {
+declare module 'react' {
   namespace JSX {
     interface IntrinsicElements {
       'ui-title-bar': UITitleBarAttributes & {
-        ref?: LegacyRef<UITitleBarElement | null>;
+        ref?: import('react').LegacyRef<UITitleBarElement | null>;
       };
     }
   }
