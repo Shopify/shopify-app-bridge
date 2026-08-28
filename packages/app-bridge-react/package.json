@@ -24,7 +24,8 @@
     "build": "vite build",
     "watch": "vite build --watch --mode=development",
     "test": "vitest run --passWithNoTests",
-    "type-check": "tsc -p tsconfig.json --noEmit",
+    "type-check": "tsc -p tsconfig.json --noEmit && pnpm run type-check:tests",
+    "type-check:tests": "tsc -p tests && tsc -p tests/tsconfig.react19.json",
     "coverage": "vitest run --passWithNoTests --coverage",
     "lint": "oxlint -c .eslintrc.json"
   },
@@ -71,6 +72,7 @@
     "@shopify/typescript-configs": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
+    "@types/react-19": "npm:@types/react@19.2.18",
     "@types/react-dom": "catalog:",
     "oxlint": "catalog:",
     "react": "catalog:",
