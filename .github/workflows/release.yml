@@ -29,16 +29,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install locked dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Setup repository
+        uses: ./.github/actions/setup
 
       - name: Select release mode
         id: changesets
@@ -59,16 +51,8 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version-file: .nvmrc
-
-      - name: Install locked dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Setup repository
+        uses: ./.github/actions/setup
 
       - name: Create release pull request
         uses: changesets/action/version@8488615a623b1b9c987934bb89eae8af6a946ac1 # v2.1.1
@@ -93,20 +77,11 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
+      - name: Setup repository
+        uses: ./.github/actions/setup
 
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
-        with:
-          node-version-file: .nvmrc
-          cache: 'pnpm'
-
-      - name: Install locked dependencies
-        run: pnpm install --frozen-lockfile --ignore-scripts
-
-      - name: Build packages
-        run: pnpm build
+      - name: Validate repository
+        uses: ./.github/actions/validate
 
       - name: Pack publishable packages
         id: pack
@@ -133,19 +108,12 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Install pnpm
-        uses: pnpm/action-setup@fc06bc1257f339d1d5d8b3a19a8cae5388b55320 # v5.0.0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+      # The setup action installs the Changesets CLI from the frozen lockfile
+      # without running dependency lifecycle scripts in this OIDC-enabled job.
+      - name: Setup repository
+        uses: ./.github/actions/setup
         with:
-          node-version-file: .nvmrc
           registry-url: 'https://registry.npmjs.org'
-
-      # The publish action needs the Changesets CLI, but dependency lifecycle
-      # scripts must not execute in this OIDC-enabled job.
-      - name: Install locked publishing tools
-        run: pnpm install --frozen-lockfile --ignore-scripts
 
       - name: Publish packed artifacts
         id: publish
