@@ -1,5 +1,11 @@
 # Changelog
 
+## 4.2.14
+
+### Patch Changes
+
+- b61cda8: Fix React 19 JSX type compatibility for App Bridge web components
+
 ## 4.2.13
 
 ### Patch Changes
