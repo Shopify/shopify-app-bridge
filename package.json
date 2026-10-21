@@ -27,7 +27,7 @@
     "format:check": "prettier --check ."
   },
   "devDependencies": {
-    "@changesets/cli": "^2.29.8",
+    "@changesets/cli": "3.0.1",
     "prettier": "^3.8.1"
   }
 }
