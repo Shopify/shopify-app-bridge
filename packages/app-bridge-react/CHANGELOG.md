@@ -1,5 +1,12 @@
 # Changelog
 
+## 4.2.15
+
+### Patch Changes
+
+- Updated dependencies [a679c31]
+  - @shopify/app-bridge-types@0.7.4
+
 ## 4.2.14
 
 ### Patch Changes
