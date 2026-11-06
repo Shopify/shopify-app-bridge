@@ -1,0 +1,25 @@
+name: Validate repository
+description: Run the checks required by CI and before packaging a release
+
+runs:
+  using: composite
+  steps:
+    - name: Check formatting
+      shell: bash
+      run: pnpm format:check
+
+    - name: Build
+      shell: bash
+      run: pnpm build
+
+    - name: Lint
+      shell: bash
+      run: pnpm lint
+
+    - name: Type check
+      shell: bash
+      run: pnpm type-check
+
+    - name: Test
+      shell: bash
+      run: pnpm test
