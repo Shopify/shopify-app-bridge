@@ -75,7 +75,7 @@ For information on how to migrate from Shopify App Bridge React 3.x.x, see the [
 
 ### Components
 
-App Bridge React provides a few component wrappers for the custom elements available in App Bridge, such as [Modal](https://shopify.dev/docs/api/app-bridge-library/react-components/modal), [NavMenu](https://shopify.dev/docs/api/app-bridge-library/react-components/navmenu), and [TitleBar](https://shopify.dev/docs/api/app-bridge-library/react-components/titlebar).
+App Bridge React provides a few component wrappers for the custom elements available in App Bridge, such as [Modal](https://shopify.dev/docs/api/app-bridge-library/react-components/modal), [NavMenu](https://shopify.dev/docs/api/app-bridge-library/react-components/navmenu), [TitleBar](https://shopify.dev/docs/api/app-bridge-library/react-components/titlebar), and `AppWindow` (a wrapper around [`s-app-window`](https://shopify.dev/docs/api/app-bridge-library/web-components/s-app-window)).
 
 ```jsx
 import {Modal, TitleBar, useAppBridge} from '@shopify/app-bridge-react';

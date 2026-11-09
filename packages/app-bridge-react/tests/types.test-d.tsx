@@ -1,5 +1,5 @@
 import {createRef} from 'react';
-import type {} from '@shopify/app-bridge-react';
+import {AppWindow} from '@shopify/app-bridge-react';
 
 export const elements = (
   <>
@@ -22,8 +22,8 @@ export const elements = (
       </a>
     </s-app-nav>
     <s-app-window
-      id="product-window"
-      src="/products"
+      id="bulk-editor"
+      src="/bulk-editor"
       ref={createRef<SAppWindowElement>()}
     />
   </>
@@ -41,8 +41,10 @@ export const titleBarWithUnknownAttribute = <ui-title-bar unknownAttribute />;
 export const appNavWithUnknownAttribute = <s-app-nav unknownAttribute />;
 export const appWindowWithUnknownAttribute = (
   // @ts-expect-error Unknown attributes should not be accepted.
-  <s-app-window src="/products" unknownAttribute />
+  <s-app-window src="/x" unknownAttribute />
 );
+// @ts-expect-error `src` is required.
+export const appWindowWithoutSrc = <s-app-window />;
 
 const wrongRef = createRef<{notAnAppBridgeElement: true}>();
 
@@ -56,7 +58,24 @@ export const saveBarWithWrongRef = <ui-save-bar ref={wrongRef} />;
 export const titleBarWithWrongRef = <ui-title-bar ref={wrongRef} />;
 // @ts-expect-error The ref should point to an SAppNavElement.
 export const appNavWithWrongRef = <s-app-nav ref={wrongRef} />;
-export const appWindowWithWrongRef = (
-  // @ts-expect-error The ref should point to an SAppWindowElement.
-  <s-app-window src="/products" ref={wrongRef} />
+// @ts-expect-error The ref should point to a SAppWindowElement.
+export const appWindowWithWrongRef = <s-app-window src="/x" ref={wrongRef} />;
+
+// The React wrappers accept the same attributes as their elements plus
+// `open`/`onShow`/`onHide`, and forward refs to the element type.
+export const appWindowComponent = (
+  <AppWindow
+    id="bulk-editor"
+    src="/bulk-editor"
+    open
+    onShow={() => {}}
+    onHide={() => {}}
+    ref={createRef<SAppWindowElement>()}
+  />
+);
+// @ts-expect-error `src` is required.
+export const appWindowComponentWithoutSrc = <AppWindow id="bulk-editor" />;
+export const appWindowComponentWithWrongRef = (
+  // @ts-expect-error The ref should point to a SAppWindowElement.
+  <AppWindow src="/x" ref={wrongRef} />
 );
