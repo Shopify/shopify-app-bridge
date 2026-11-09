@@ -1,3 +1,6 @@
+export type {AppWindowProps} from './components/AppWindow';
+export {AppWindow} from './components/AppWindow';
+
 export type {ModalProps} from './components/Modal';
 export {Modal} from './components/Modal';
 
