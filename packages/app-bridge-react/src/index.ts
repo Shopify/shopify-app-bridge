@@ -1,3 +1,19 @@
+import type {SAppNavAttributes} from '@shopify/app-bridge-types';
+
+// App Bridge element without a React component. @types/react 19 ignores the
+// global JSX namespace that @shopify/app-bridge-types augments. s-app-window is
+// declared alongside its AppWindow component, and s-page is left to
+// @shopify/polaris-types, which already declares it on React's JSX.
+declare module 'react' {
+  namespace JSX {
+    interface IntrinsicElements {
+      's-app-nav': SAppNavAttributes & {
+        ref?: import('react').LegacyRef<SAppNavElement | null>;
+      };
+    }
+  }
+}
+
 export type {AppWindowProps} from './components/AppWindow';
 export {AppWindow} from './components/AppWindow';
 
